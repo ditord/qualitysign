@@ -1,43 +1,39 @@
-// Function to toggle the embed code text field visibility
-function toggleEmbedCode() {
-    var embedCodeField1 = document.getElementById('embedCodeField1');
-    if (embedCodeField.style.display === 'none' || !embedCodeField.style.display) {
-      embedCodeField.style.display = 'block';
-    } else {
-      embedCodeField.style.display = 'none';
+
+document.addEventListener("DOMContentLoaded",()=>{
+    const images = [document.getElementById('embed_image_1'),document.getElementById('embed_image_2'),document.getElementById('embed_image_3')]
+    images.forEach((item,index)=>{
+        item.addEventListener('click',(event)=>toggleEmbedActive(index,event))
+    })
+})
+
+function toggleEmbedActive(id,event){
+    const items = [document.getElementById('embed_body_1'),document.getElementById('embed_body_2'),document.getElementById('embed_body_3')]
+    
+    items.forEach((item)=>item.classList.remove('active'))
+    if(items[id]){
+        items[id].classList.toggle('active')
     }
-  }
-  
-  // Function to copy the embed code to the clipboard
-  function copyEmbedCode() {
-    var embedCodeTextarea = document.getElementById('embedCodeTextarea');
-    embedCodeTextarea.select(); // Selects the content of the textarea
-    document.execCommand('copy'); // Copies the selected text to the clipboard
-  
-    // Optional: Show a message confirming that the text was copied
-    alert('Embed code copied to clipboard.');
-  }
-
-
-
-// Function to toggle the visibility of a specific embed code text field
-function toggleEmbedCode(fieldId) {
-    var embedCodeField = document.getElementById(fieldId);
-    if (embedCodeField.style.display === 'none' || !embedCodeField.style.display) {
-      embedCodeField.style.display = 'block';
-    } else {
-      embedCodeField.style.display = 'none';
+    if(event)event.stopPropagation();
+}
+document.addEventListener('click',(event)=>{
+    const items = [document.getElementById('embed_body_1'),document.getElementById('embed_body_2'),document.getElementById('embed_body_3')]
+    let contain = false
+    
+    if(! items.some(item => item.contains(event.target))){
+        toggleEmbedActive(-1)
     }
-  }
-  
-  // Function to copy the embed code from a specific textarea to the clipboard
-  function copyEmbedCode(textareaId) {
-    var embedCodeTextarea = document.getElementById(textareaId);
-    embedCodeTextarea.select(); // Selects the content of the textarea
-    document.execCommand('copy'); // Copies the selected text to the clipboard
-  
-    // Optional: Show a message confirming that the text was copied
-    alert('Embed code copied to clipboard.');
-  }
-  
+    
+})
 
+function copyEmbedCode(id,event){
+    const textarea = document.getElementById(id)
+    navigator.clipboard.writeText(textarea.textContent).then(()=>{
+        event.target.classList.add('success')
+        textarea.classList.add('success')
+        setTimeout(()=>{
+            event.target.classList.remove('success')
+            textarea.classList.remove('success')
+        },1000)
+    })
+    
+}
